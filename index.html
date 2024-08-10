@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weather app</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        .home{
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           height: 730px;
+           width:auto;
+       }
+       .home::before {
+    content: "";
+    background-image: url(bg.jpg);
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%; /* Set height to 100% to cover the entire height of the container */
+    width: 100%;  /* Set width to 100% to cover the entire width of the container */
+    z-index: -1;
+    opacity: 1;
+    background-size: cover; /* Make the background image cover the entire container */
+}
+
+        
+     
+       .box{
+       height: 75vh;
+       width: 400px;
+       border: 1px solid #b5b3b3;
+       background-color:rgba(255,255,255,-1);
+       backdrop-filter: blur(18px);
+       align-items: center;
+       justify-content: center;
+        border-radius: 20px;
+      
+       }
+       .searchbx{
+        color: white;
+        height:10%;
+        width: 90%;
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #ffffff;
+        margin:0px 20px;
+        margin-top: 10px;
+        border-radius: 30px;
+       
+       }
+       .searchbx input{
+        height:40px;
+       width:70%;
+       color: hwb(0 100% 0%);
+       border: none;
+       background: none;
+       text-align: left;
+       font-size: 1.2rem;
+       
+       }
+       .searchbx input:hover{
+        border: none;
+       }
+       .searchbx img{
+       
+       filter: invert(100%);
+        height: 40px;
+
+       }
+       .main{
+        color: white;
+        width: 90%;
+        display:flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin:10px 20px;
+       }
+       .main img{
+        height:200px;
+       }
+       .tmp{
+        display: flex;
+       }
+       .tmp h1{
+        font-size: 4rem;
+       }
+       .tmp h6{
+        font-size: 1rem;
+       }
+       .last{
+        color: white;
+        display: flex;
+        justify-content: space-evenly;
+       margin: 20px 10px;
+        height: 20%;
+        
+       
+       
+       }
+      .bx{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+       
+        width: 40%;
+      }
+      .bx img{
+        filter: invert(100%);
+        height: 60%;
+        margin-right: 5px;
+      }
+    </style>
+</head>
+<body>
+     <div class="home">
+     
+       <div class="box">
+        <div class="searchbx">
+            <input type="text" placeholder="Enter Location">
+            <img src="search-removebg-preview.png" alt="">
+        </div>
+        <div class="main">
+            <img src="" alt="">
+            <div class="tmp">
+                <h1></h1>
+                <p>o</p>
+                <h6>C</h6>
+            </div>
+            <h2></h2>
+        </div>
+        <div class="last">
+            <div class="bx">
+                <img src="wind-removebg-preview.png" alt="">
+                <div class="per wind">
+                    <h2></h2>
+                   <h5>Wind</h5>
+                </div>
+            </div>
+            <div class="bx">
+                <img src="humid-removebg-preview.png" alt="">
+                <div class="per humid">
+                    <h2></h2>
+                   <h5>Humidity</h5>
+                </div>
+            </div>
+        </div>
+       </div>
+     </div>
+     <script>
+        const box=document.querySelector(".box");
+        const search= document.querySelector(".searchbx");
+        const weatherbx=document.querySelector(".main");
+        const last=document.querySelector(".last");
+        search.addEventListener("click",()=>{
+            const key="e77207ab258fd201ea3788a55c113f73";
+            const city=document.querySelector(".searchbx input").value;
+            if(city==""){
+                return;
+            }
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${key}`).then(response=>response.json()).then(json=>{
+                const img=document.querySelector(".main img");
+                const tmp=document.querySelector(".main .tmp h1");
+                const des=document.querySelector(".main h2");
+                const wind=document.querySelector(".wind h2");
+                const humid=document.querySelector(".humid h2");
+                switch(json.weather[0].main){
+                    case 'Clear':
+                        img.src="clear-removebg-preview.png";
+                        break;
+                        case 'Rain':
+                        img.src="rain-removebg-preview.png";
+                        break;
+                        case 'Snow':
+                        img.src="snow-removebg-preview.png";
+                        break;
+                        case 'Clouds':
+                        img.src="download-removebg-preview.png";
+                        break;
+                        
+                        case 'Mist':
+                        img.src="download-removebg-preview.png";
+                        case 'Haze':
+                        img.src="download-removebg-preview.png";
+                        break;
+                        default:
+                            img.src="suncl-removebg-preview.png";
+                            break;
+                }
+                tmp.innerHTML=`${parseInt(json.main.temp)}`;
+                des.innerHTML=`${json.weather[0].description}`;
+                humid.innerHTML=`${json.main.humidity}%`;
+                wind.innerHTML=`${json.wind.speed}Km/h`;
+
+            })
+
+        })
+     </script>
+    <script src="script.js"></script>
+</body>
+</html>
